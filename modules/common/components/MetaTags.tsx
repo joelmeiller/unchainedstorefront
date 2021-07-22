@@ -5,13 +5,11 @@ import { useRouter } from 'next/router';
 import getCurrentDomain from '../utils/getCurrentDomain';
 
 const {
-  publicRuntimeConfig: { theme },
+  publicRuntimeConfig: { FRONTEND_URL, theme },
 } = getConfig();
 
-
-
 const MetaTags = ({
-  url = getCurrentDomain(),
+  url = FRONTEND_URL,
   imageUrl = 'https://unchained.shop/img/unchained-commerce-snake.svg',
   title,
   description = '',
