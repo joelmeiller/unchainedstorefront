@@ -3,9 +3,10 @@ import fetch from 'isomorphic-unfetch';
 import getConfig from 'next/config';
 
 import possibleTypes from '../../../possibleTypes.json';
+import getCurrentDomain from '../../common/utils/getCurrentDomain';
 
 const {
-  publicRuntimeConfig: { GRAPHQL_ENDPOINT },
+  publicRuntimeConfig: { GRAPHQL_ENDPOINT, FRONTEND_URL },
 } = getConfig();
 
 let apolloClient = null;
@@ -18,7 +19,10 @@ if (!process.browser) {
 function create(initialState, ctx) {
   const remoteAddress = ctx?.req?.connection?.remoteAddress;
   const httpLink = new HttpLink({
-    uri: GRAPHQL_ENDPOINT,
+    uri:
+      GRAPHQL_ENDPOINT ||
+      (FRONTEND_URL && `${FRONTEND_URL}/api/graphql`) ||
+      `${getCurrentDomain()}/api/graphql`,
     credentials: 'same-origin',
     headers: remoteAddress ? { 'x-real-ip': remoteAddress } : undefined,
   });
